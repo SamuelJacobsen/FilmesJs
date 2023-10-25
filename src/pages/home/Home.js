@@ -1,27 +1,51 @@
 import React, { useState, useEffect } from "react";
 import api from "../../services/api";
+import { Card, Row, Col, Pagination } from "react-bootstrap";
+import Header from "../../components/Header";
+import MovieCard from "../../components/MovieCard";
+import "./Home.css";
 
 function Home() {
-  const [message, setMessage] = useState("");
+  const [movies, setMovies] = useState([]);
+  const [page, setPage] = useState(1);
+  const moviesPerPage = 20;
 
   useEffect(() => {
-    const fetchMessage = async () => {
+    const fetchMovies = async () => {
       try {
-        // Aqui, você deve definir o endpoint correto da sua API. Por exemplo:
-        const response = await api.get("/movie/popular"); // Substitua pelo endpoint correto
-        setMessage(response.data.message);
+        const response = await api.get("/discover/movie", {
+          params: {
+            page,
+          },
+        });
+        setMovies(response.data.results);
       } catch (error) {
         console.error("Erro na solicitação à API: ", error);
       }
     };
 
-    fetchMessage();
-  }, []);
+    fetchMovies();
+  }, [page]);
 
   return (
-    <div>
-      <h1>Bem-vindo ao seu Aplicativo de Filmes e Séries</h1>
-      <p>{message}</p>
+    <div className="home">
+      <Header onSearch={(searchQuery) => console.log(searchQuery)} />
+
+      <Row>
+        {movies.map((movie) => (
+          <Col key={movie.id} lg={3} md={4} sm={6} xs={12}>
+            <MovieCard movie={movie} />
+          </Col>
+        ))}
+      </Row>
+
+      <Pagination>
+        <Pagination.Prev
+          onClick={() => setPage((prevPage) => prevPage - 1)}
+          disabled={page === 1}
+        />
+        <Pagination.Next onClick={() => setPage((prevPage) => prevPage + 1)} />
+      </Pagination>
     </div>
   );
 }
