@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Row, Col } from "react-bootstrap";
+import { Modal, Row, Col, Button } from "react-bootstrap";
 import { useMovieContext } from "../modules/MovieContext";
 
 function MovieModal({ show, handleClose }) {
@@ -12,6 +12,10 @@ function MovieModal({ show, handleClose }) {
 
   return (
     <Modal show={show} onHide={handleClose}>
+      <Modal.Header closeButton>
+        
+        <Modal.Title>{selectedMovie ? selectedMovie.title : "Carregando..."}</Modal.Title>
+      </Modal.Header>
       <Modal.Body style={modalStyle}>
         <Row>
           <Col xs={12} md={6}>
@@ -20,11 +24,10 @@ function MovieModal({ show, handleClose }) {
           <Col xs={12} md={6}>
             {selectedMovie ? (
               <div>
-                <h4>{selectedMovie.title}</h4>
                 <p>{selectedMovie.overview}</p>
                 <p>Avaliação: {selectedMovie.vote_average}</p>
                 <p>Data de lançamento: {selectedMovie.release_date}</p>
-                {/* Mais informações do filme */}
+                
               </div>
             ) : (
               "Carregando..."
