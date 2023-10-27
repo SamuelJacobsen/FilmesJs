@@ -1,0 +1,17 @@
+
+.black-background {
+    background-color: black;
+  }
+  
+ 
+  .red-title {
+    text-align: center;
+    color: red;
+  }
+  
+ 
+  .card {
+    background-color: red; 
+    color: white; 
+    border: 1px solid red; 
+  }
