@@ -1,17 +1,40 @@
-
 .black-background {
     background-color: black;
-  }
-  
- 
-  .red-title {
+}
+
+
+.red-title {
     text-align: center;
     color: red;
+}
+
+
+.card {
+    background-color: red;
+    color: white;
+    border: 1px solid red;
+}
+.page-navigation .btn {
+    background-color: red !important; 
+    color: white !important; 
+    border: 1px solid red !important; 
   }
   
- 
-  .card {
-    background-color: red; 
-    color: white; 
-    border: 1px solid red; 
+
+  .page-navigation .btn:disabled {
+    background-color: lightgray !important; 
+    color: white !important; 
   }
+  
+
+  .page-navigation .btn:hover {
+    background-color: darkred !important; 
+    border: 1px solid darkred !important; 
+  }
+  
+
+  .page-navigation .btn:active {
+    background-color: darkred !important; 
+    border: 1px solid darkred !important; 
+  }
+  

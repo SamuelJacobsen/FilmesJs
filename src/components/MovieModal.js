@@ -7,6 +7,7 @@ function MovieModal({ show, handleClose, movie, poster }) {
     color: "white", 
     
   };
+  
 
   return (
     <Modal show={show} onHide={handleClose} >

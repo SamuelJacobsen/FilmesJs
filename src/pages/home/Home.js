@@ -4,6 +4,7 @@ import {
   Row,
   Col,
   Pagination,
+  Button,
 } from "react-bootstrap";
 import api from "../../services/api";
 import SearchInput from "../../components/SearchInput";
@@ -90,21 +91,32 @@ function Home() {
   const onTapSearch = () => {
     if (searchQuery.trim().length < 1) {
       setEmptyInput(true);
-     
       setSearchQuery("");
       setPage(1);
     } else {
-      setPage(1); 
+      setPage(1);
       fetchMovies();
     }
   };
 
   const dataFiltered = useMemo(() => movies, [movies]);
 
+  const handlePrevPage = () => {
+    if (page > 1) {
+      setPage(page - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (page < Math.ceil(count / 20)) {
+      setPage(page + 1);
+    }
+  };
+
   return (
-    <div className="black-background"> 
+    <div className="black-background">
       <Container>
-        <h1 className="red-title">FilmesJS</h1> 
+        <h1 className="red-title">FilmesJS</h1>
         <p className="red-title">Aqui você encontra tudo sobre os principais filmes</p>
         <SearchInput
           placeholder="Busque seu filme"
@@ -120,6 +132,21 @@ function Home() {
             </Col>
           ))}
         </Row>
+
+        <div className="page-counter">
+          <span style={{ color: "white" }}>
+            Página {page} de {Math.ceil(count / 20)}
+          </span>
+        </div>
+
+        <div className="page-navigation">
+          <Button variant="primary" onClick={handlePrevPage}  disabled={page === 1}>
+            Anterior
+          </Button>
+          <Button variant="primary" onClick={handleNextPage} disabled={page === Math.ceil(count / 20)}>
+            Próxima
+          </Button>
+        </div>
 
         <Pagination
           count={Math.ceil(count / 20)}
