@@ -16,8 +16,8 @@ function MovieModal({ show, handleClose, movie, poster }) {
               style={{ maxWidth: "100%" }}
             />
             <p>{movie.overview}</p>
-            <p>Rating: {movie.vote_average}</p>
-            <p>Release Date: {movie.release_date}</p>
+            <p>Avaliação: {movie.vote_average}</p>
+            <p>Data de lançamento: {movie.release_date}</p>
             {/* mais info */}
           </div>
         ) : (

@@ -17,64 +17,11 @@ function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
   const [poster, setPoster] = useState(null);
-  const [loading, setLoading] = useState(false);
   const [emptyInput, setEmptyInput] = useState(false);
   const [count, setCount] = useState(0);
+  const [loading, setLoading] = useState(false);
 
-  const filterData = (query, data) => {
-    if (emptyInput) {
-      setEmptyInput(false);
-    }
-
-    if (!query) {
-      return data;
-    } else {
-      const filtered = data.filter((movie) =>
-        movie.title.toLowerCase().includes(query.toLowerCase())
-      );
-
-      if (filtered.length === 0) {
-        const searchMovies = async () => {
-          try {
-            setLoading(true);
-            const response = await api.get("/search/movie", {
-              params: {
-                query,
-                page,
-              },
-            });
-
-            setMovies(response.data.results);
-            setCount(response.data.total_results);
-          } catch (error) {
-            console.error("Erro na solicitação à API: ", error);
-          } finally {
-            setLoading(false);
-          }
-        };
-
-        searchMovies(query);
-        return [];
-      } else {
-        return filtered;
-      }
-    }
-  };
-
-  const onTapSearch = () => {
-    if (searchQuery.trim().length < 1) {
-      setEmptyInput(true);
-    } else {
-      filterData(searchQuery, movies);
-    }
-  };
-
-  const dataFiltered = useMemo(() => filterData(searchQuery, movies), [
-    searchQuery,
-    movies,
-  ]);
-
-  const fetchMovies = async (page) => {
+  const fetchMostRecentMovies = async () => {
     try {
       setLoading(true);
       const response = await api.get("/discover/movie", {
@@ -91,9 +38,34 @@ function Home() {
     }
   };
 
+  const fetchMovies = async () => {
+    if (searchQuery.trim().length > 0) {
+      // Handle search
+      try {
+        setLoading(true);
+        const response = await api.get("/search/movie", {
+          params: {
+            query: searchQuery,
+            page,
+          },
+        });
+
+        setMovies(response.data.results);
+        setCount(response.data.total_results);
+      } catch (error) {
+        console.error("Erro na solicitação à API: ", error);
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      // Fetch most recent titles
+      fetchMostRecentMovies();
+    }
+  };
+
   useEffect(() => {
-    fetchMovies(page);
-  }, [page]);
+    fetchMovies();
+  }, [page, searchQuery]);
 
   const openModal = async (movie) => {
     setSelectedMovie(movie);
@@ -113,6 +85,20 @@ function Home() {
     setShowModal(false);
     setPoster(null);
   };
+
+  const onTapSearch = () => {
+    if (searchQuery.trim().length < 1) {
+      setEmptyInput(true);
+      // Clear the search query and return to most recent titles
+      setSearchQuery("");
+      setPage(1);
+    } else {
+      setPage(1); // Reset the page when a new search is initiated
+      fetchMovies();
+    }
+  };
+
+  const dataFiltered = useMemo(() => movies, [movies]);
 
   return (
     <Container>
